@@ -1,9 +1,10 @@
+'''
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
 from .models import *
 import json
 import hashlib
-from slackclient import SlackClient
+from slack import WebClient
 import datetime
 from django.core.serializers.json import DjangoJSONEncoder
 
@@ -17,7 +18,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 #         pass
         
 #     async def receive(self, text_data):
-#         text_data_json = json.loads(text_data)
+#         text_data_json = json.loads(text_data) 
 #         user = text_data_json['user']
 #         message = text_data_json['message']
 #         print(user, message)
@@ -133,7 +134,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
 
 
-        print("USER IDENTITY VIA PROJECT_ID =============================" + self.project_id)
+        print("USER IDENTITY VIA PROJECT_ID =============================" , self.project_id)
         print(self.user)
         # self.scrum_user = ScrumProjectRole.objects.get(user = self.user, project_id=self.project_id)
         self.scrum_user = ScrumUser.objects.get(nickname = self.user).scrumprojectrole_set.get(project_id=self.project_id)
@@ -199,8 +200,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
             await database_sync_to_async(self.generate_message)(self.room_object, self.user, message)
 
     async def chat_message(self, event):
+        print("TEST CLIENT UPDATE WEBSOCKET")
         user = event['user']
         message = event['message'] 
         date_Time = (datetime.datetime.strftime(datetime.datetime.now(), "%Y-%m-%d %H:%M:%S"))
         profile_picture = event['profile_picture']
         await self.send(text_data=json.dumps({'user': user, 'message': message, 'date_Time':date_Time, 'profile_picture': profile_picture}, sort_keys=True, indent=1,cls=DjangoJSONEncoder))  
+'''

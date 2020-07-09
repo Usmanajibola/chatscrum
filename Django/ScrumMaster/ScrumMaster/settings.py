@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 
 import os
 import datetime
+from decouple import config, Csv
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -31,7 +32,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-    'channels',
+   # 'channels',
     'Scrum.apps.ScrumConfig',
     'rest_framework',
     'corsheaders',
@@ -41,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework.authtoken',
 ]
 
 
@@ -70,6 +72,7 @@ REST_FRAMEWORK = {
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.TokenAuthentication'
     ),
 }
 
@@ -104,10 +107,10 @@ WSGI_APPLICATION = 'ScrumMaster.wsgi.application'
 '''
 DATABASES = {
     'default': {
-        'ENGINE': 'mysql.connector.django',
+        'ENGINE': 'django.db.backends.mysql',
         'NAME': 'chatscrum',
-        'USER': 'root',
-        'PASSWORD': '',
+        'USER': 'usman',
+        'PASSWORD': 'usman123',
         'OPTIONS': {
             'raise_on_warnings': False,
             'use_pure': True
@@ -119,8 +122,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'chatscrum',
-        'USER': 'root',
-        'PASSWORD': '',
+        'USER': 'usman',
+        'PASSWORD': 'usman123',
         'HOST': 'localhost',
         'PORT': ''
 
@@ -132,10 +135,15 @@ DATABASES = {
 EMAIL_USE_TLS = True
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_PASSWORD = 'anjolaoluwa'
-EMAIL_HOST_USER = 'nathanoluwaseyi@gmail.com'
+EMAIL_HOST_PASSWORD = 'Hikmatabass'
+EMAIL_HOST_USER = 'usmanajibolaabass@gmail.com'
 EMAIL_PORT = 587
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+LOGIN_URL = 'http://localhost:4200/login'
+
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10*1024*1024
+
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
@@ -166,7 +174,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
@@ -184,12 +192,14 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 LOGIN_REDIRECT_URL = '/home'
 
+#MY_URL = 'https://localhost:8000'
 
-ASGI_APPLICATION = "ScrumMaster.routing.application"
+
+#ASGI_APPLICATION = "ScrumMaster.routing.application"
 
 
 #Uncomment if you have redis.
-
+'''
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
@@ -198,7 +208,22 @@ CHANNEL_LAYERS = {
         }
     }
 }
-
-FRONTEND = 'http://localhost:4200/home/'
+'''
+FRONTEND = 'http://localhost:4200/home'
 
 SECURE_SSL_REDIRECT = False
+
+
+
+AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID', '')
+AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY', '')
+
+
+AWS_REGION = config('AWS_REGION', '')
+
+AWS_WS_GATEWAY = config('AWS_WS_GATEWAY', '')
+
+SLACK_APP_TOKEN = config('SLACK_APP_TOKEN', '')
+SLACK_CLIENT_ID = config('SLACK_CLIENT_ID', '')
+SLACK_CLIENT_SECRET = config('SLACK_CLIENT_SECRET', '')
+
